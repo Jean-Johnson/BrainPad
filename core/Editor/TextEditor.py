@@ -1,7 +1,8 @@
 from tkinter import Text, Frame, Button, Menubutton
 from tkinter import filedialog
 class TextEditor:
-    def __init__(self, root):
+    def __init__(self, root,llm):
+        self.llm = llm
         self.text = Text(root)
         self.text.grid()
 
@@ -14,7 +15,7 @@ class TextEditor:
     def open_file(self):
         file_path = filedialog.askopenfilename()
         if file_path:
-            with open(file_path, "r") as file:
+            with open(file_path, "r") as file:  
                 content = file.read()
                 self.text.delete("1.0", "end")
                 self.text.insert("1.0", content)
@@ -26,9 +27,10 @@ class TextEditor:
             self.text.insert("end", "\n"+uppercased_text)
     def generate(self):
         text_content = self.text.get("1.0", "end-1c")
-        if text_content:
-            generated = " This will be filled by llm"
-            self.text.insert("end", generated)
+        self.llm.generate(self.text,text_content)
+        # generated = self.llm.call("HI",self.text)
+        # if text_content:
+        #     self.text.insert("end", generated)
 
     def set_font_helvetica(self):
         self.text.config(font="Helvetica")

@@ -1,7 +1,12 @@
+import os
+from dotenv import load_dotenv
 from tkinter import *
 from tkinter import Text, Frame, Button, Menubutton
 from tkinter import filedialog
 from core.Editor.TextEditor import TextEditor
+from core.engines.phi3 import LLM
+
+load_dotenv()
 
 def commands():
     pass
@@ -9,7 +14,8 @@ class ApplicationWindow:
     def __init__(self, root):
         self.root = root
         self.root.title("BrainPad")
-        self.text_editor = TextEditor(root)
+        self.llm = LLM(os.getenv("KEY"))
+        self.text_editor = TextEditor(root,self.llm)
         self.button_frame = Frame(root)
         self.button_frame.grid()
         self.open = Button(self.button_frame, text="Open", command=self.text_editor.open_file)
